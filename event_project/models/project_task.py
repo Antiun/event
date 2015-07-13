@@ -9,5 +9,5 @@ from openerp import models, fields
 class ProjectTask(models.Model):
     _inherit = 'project.task'
 
-    event = fields.Many2one(comodel_name='event.event',
-                            inverse_name='tasks', string='Event')
+    event = fields.One2many(comodel_name='event.event',
+                            related='project_id.event', string='Event')
