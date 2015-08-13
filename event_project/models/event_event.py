@@ -29,7 +29,12 @@ class EventEvent(models.Model):
     def project_template_duplicate(self):
         if self.project_template and not self.project:
             assert len(self) >= 0 and len(self) <= 1, "Expected singleton"
-            result = self.project_template.duplicate_template()
+            if self.project_template.parent_id:
+                parent_id = self.project_template.parent_id.id
+            else:
+                parent_id = False
+            result = self.project_template.with_context(
+                {'parent_id': parent_id}).duplicate_template()
             self.project = result['res_id']
             name = self.name
             self.project.write({'name': name,
